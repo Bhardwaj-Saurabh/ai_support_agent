@@ -1,0 +1,16 @@
+$ agentcore invoke '{"prompt": "Go to https://example.com and tell me the page title.", "customer_id": "CUST-123", "session_id": "t6"}'
+╭───────────────────────────────── csai_agent ─────────────────────────────────╮
+│ Session: c5c130aa-4597-47d5-920a-ec967abb4c4f                                │
+│ Request ID: 2f38cd4e-8df4-4ff4-a297-9a697c129071                             │
+│ ARN:                                                                         │
+│ arn:aws:bedrock-agentcore:us-east-1:314182259346:runtime/csai_agent-D414VsAX │
+│ hF                                                                           │
+│ Logs: aws logs tail                                                          │
+│ /aws/bedrock-agentcore/runtimes/csai_agent-D414VsAXhF-DEFAULT                │
+│ --log-stream-name-prefix "2026/08/19/[runtime-logs" --follow                 │
+│       aws logs tail                                                          │
+│ /aws/bedrock-agentcore/runtimes/csai_agent-D414VsAXhF-DEFAULT                │
+│ --log-stream-name-prefix "2026/08/19/[runtime-logs" --since 1h               │
+╰──────────────────────────────────────────────────────────────────────────────╯
+Response:
+The page title for https://example.com is: **Example Domain**

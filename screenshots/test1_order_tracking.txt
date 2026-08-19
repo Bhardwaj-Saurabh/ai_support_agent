@@ -1,0 +1,26 @@
+$ agentcore invoke '{"prompt": "Can you track order ORD-001?", "customer_id": "CUST-123", "session_id": "t1"}'
+╭───────────────────────────────── csai_agent ─────────────────────────────────╮
+│ Session: c5c130aa-4597-47d5-920a-ec967abb4c4f                                │
+│ Request ID: 4bb61cc2-4d02-40b1-9b37-76fd674e054b                             │
+│ ARN:                                                                         │
+│ arn:aws:bedrock-agentcore:us-east-1:314182259346:runtime/csai_agent-D414VsAX │
+│ hF                                                                           │
+│ Logs: aws logs tail                                                          │
+│ /aws/bedrock-agentcore/runtimes/csai_agent-D414VsAXhF-DEFAULT                │
+│ --log-stream-name-prefix "2026/08/19/[runtime-logs" --follow                 │
+│       aws logs tail                                                          │
+│ /aws/bedrock-agentcore/runtimes/csai_agent-D414VsAXhF-DEFAULT                │
+│ --log-stream-name-prefix "2026/08/19/[runtime-logs" --since 1h               │
+╰──────────────────────────────────────────────────────────────────────────────╯
+Response:
+Thanks for sharing your customer ID. Here's the current status of your order 
+**ORD-001**:
+**Order Summary:**
+- **Item:** Wireless Headphones Pro (1 unit)
+- **Total:** $89.99
+- **Status:** ✅ SHIPPED
+- **Carrier:** UPS
+- **Tracking Number:** TRK987654321  
+- **Estimated Delivery:** August 21, 2026
+Would you like me to help with anything else regarding your order or loyalty 
+points?

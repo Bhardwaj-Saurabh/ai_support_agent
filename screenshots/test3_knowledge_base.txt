@@ -1,0 +1,21 @@
+$ agentcore invoke '{"prompt": "What are the benefits of the Platinum loyalty tier?", "customer_id": "CUST-123", "session_id": "t3"}'
+╭───────────────────────────────── csai_agent ─────────────────────────────────╮
+│ Session: c5c130aa-4597-47d5-920a-ec967abb4c4f                                │
+│ Request ID: 290ba6c6-7676-4f28-9a18-c0dfe3cf4449                             │
+│ ARN:                                                                         │
+│ arn:aws:bedrock-agentcore:us-east-1:314182259346:runtime/csai_agent-D414VsAX │
+│ hF                                                                           │
+│ Logs: aws logs tail                                                          │
+│ /aws/bedrock-agentcore/runtimes/csai_agent-D414VsAXhF-DEFAULT                │
+│ --log-stream-name-prefix "2026/08/19/[runtime-logs" --follow                 │
+│       aws logs tail                                                          │
+│ /aws/bedrock-agentcore/runtimes/csai_agent-D414VsAXhF-DEFAULT                │
+│ --log-stream-name-prefix "2026/08/19/[runtime-logs" --since 1h               │
+╰──────────────────────────────────────────────────────────────────────────────╯
+Response:
+As a Platinum member (5,000+ points), you get these benefits:
+- **Free same-day shipping** on eligible items  
+- **15% discount** on purchases (higher than Gold's 10%)  
+- **Priority customer support** for faster help  
+You can also redeem points at a rate of 100 points = $1 discount (min. 500 
+points), and points stay valid for 2 years.

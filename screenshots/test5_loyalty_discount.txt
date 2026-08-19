@@ -1,0 +1,24 @@
+$ agentcore invoke '{"prompt": "I am a Gold member with 4250 points. Calculate my discount on a $150 standard order.", "customer_id": "CUST-123", "session_id": "t5"}'
+╭───────────────────────────────── csai_agent ─────────────────────────────────╮
+│ Session: c5c130aa-4597-47d5-920a-ec967abb4c4f                                │
+│ Request ID: cc7eef1c-a89a-4c35-80e0-c039cc9c624b                             │
+│ ARN:                                                                         │
+│ arn:aws:bedrock-agentcore:us-east-1:314182259346:runtime/csai_agent-D414VsAX │
+│ hF                                                                           │
+│ Logs: aws logs tail                                                          │
+│ /aws/bedrock-agentcore/runtimes/csai_agent-D414VsAXhF-DEFAULT                │
+│ --log-stream-name-prefix "2026/08/19/[runtime-logs" --follow                 │
+│       aws logs tail                                                          │
+│ /aws/bedrock-agentcore/runtimes/csai_agent-D414VsAXhF-DEFAULT                │
+│ --log-stream-name-prefix "2026/08/19/[runtime-logs" --since 1h               │
+╰──────────────────────────────────────────────────────────────────────────────╯
+Response:
+Here's your loyalty discount breakdown for the $150 standard order:
+- **Gold Tier Discount**: 10% ($11.00)
+- **Loyalty Points Redeemed**: 4,000 points ($40.00 value)
+- **Total Savings**: $51.00
+- **Final Total**: $99.00
+- **Remaining Points**: 349 points
+- **Points Earned on Purchase**: 99 points
+Your Gold membership provides both a tier discount and points redemption 
+opportunity, making this order very rewarding!

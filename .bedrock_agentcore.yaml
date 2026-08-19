@@ -32,7 +32,7 @@ agents:
     bedrock_agentcore:
       agent_id: csai_agent-D414VsAXhF
       agent_arn: arn:aws:bedrock-agentcore:us-east-1:314182259346:runtime/csai_agent-D414VsAXhF
-      agent_session_id: 8aa5c01c-afb8-4ab7-b26c-4104290e375e
+      agent_session_id: c5c130aa-4597-47d5-920a-ec967abb4c4f
     codebuild:
       project_name: null
       execution_role: null

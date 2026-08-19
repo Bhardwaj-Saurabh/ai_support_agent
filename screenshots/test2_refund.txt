@@ -1,0 +1,18 @@
+$ agentcore invoke '{"prompt": "I want to return my Kindle Paperwhite (ORD-002). Please initiate a refund; reason: no longer needed.", "customer_id": "CUST-123", "session_id": "t2"}'
+╭───────────────────────────────── csai_agent ─────────────────────────────────╮
+│ Session: c5c130aa-4597-47d5-920a-ec967abb4c4f                                │
+│ Request ID: 9a480b23-9f45-45e2-8bdd-5540e1309bf2                             │
+│ ARN:                                                                         │
+│ arn:aws:bedrock-agentcore:us-east-1:314182259346:runtime/csai_agent-D414VsAX │
+│ hF                                                                           │
+│ Logs: aws logs tail                                                          │
+│ /aws/bedrock-agentcore/runtimes/csai_agent-D414VsAXhF-DEFAULT                │
+│ --log-stream-name-prefix "2026/08/19/[runtime-logs" --follow                 │
+│       aws logs tail                                                          │
+│ /aws/bedrock-agentcore/runtimes/csai_agent-D414VsAXhF-DEFAULT                │
+│ --log-stream-name-prefix "2026/08/19/[runtime-logs" --since 1h               │
+╰──────────────────────────────────────────────────────────────────────────────╯
+Response:
+Your refund for the Kindle Paperwhite (order ORD-002) has been approved. A 
+credit of **$139.99** will appear on your account within 3–5 business days. 
+Refund ID: **REF-CKU25X3O**.
