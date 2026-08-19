@@ -1,0 +1,55 @@
+{
+  "openapi" : "3.0.1",
+  "info" : {
+    "title" : "csai-support-api",
+    "version" : "2026-08-19T14:39:42Z"
+  },
+  "servers" : [ {
+    "url" : "https://k545pxtprk.execute-api.us-east-1.amazonaws.com/{basePath}",
+    "variables" : {
+      "basePath" : {
+        "default" : "prod"
+      }
+    }
+  } ],
+  "paths" : {
+    "/orders/{order_id}" : {
+      "get" : {
+        "parameters" : [ {
+          "name" : "order_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ]
+      }
+    },
+    "/customers/{customer_id}" : {
+      "get" : {
+        "parameters" : [ {
+          "name" : "customer_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ]
+      }
+    },
+    "/customers/{customer_id}/orders" : {
+      "get" : {
+        "parameters" : [ {
+          "name" : "customer_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ]
+      }
+    }
+  },
+  "components" : { },
+  "x-amazon-apigateway-security-policy" : "TLS_1_0"
+}
