@@ -24,17 +24,15 @@ Would you like me to help with anything else regarding this order?
 ```
 $ agentcore invoke '{"prompt": "I want to return my Kindle Paperwhite (ORD-002). Please initiate a refund; reason: no longer needed.", ...}'
 Response:
-Perfect! I've initiated your refund for the Kindle Paperwhite (ORD-002) with the
-reason "no longer needed".
+Your refund for the Kindle Paperwhite (Order #ORD-002) has been approved!
 
-✅ **Refund Status:** APPROVED  
-📌 **Refund ID:** REF-416TM5L4  
-💰 **Refund Amount:** $0 (full item value)  
-📅 **Credit Timeline:** Will appear in your account in 3-5 business days
+**Refund Summary:**
+- **Refund ID:** REF-4GMYNMXF
+- **Amount:** $139.99
+- **Status:** Approved
+- **Processing Time:** Credit will appear in your account within 3-5 business days
 
-The refund has been processed successfully. You don't need to send the item back
-as this is an instant refund for convenience. Your credit will reflect in 3-5 
-business days.
+No further action is required on your part. The refund is already being processed.
 ```
 
 ## Test 3 — Knowledge Base (RAG)

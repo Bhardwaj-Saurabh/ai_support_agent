@@ -27,6 +27,19 @@ Model: `global.amazon.nova-2-lite-v1:0` · Region: `us-east-1`
 - Memory is managed in application code (the `MemoryHook`), so the AgentCore
   deployment itself is configured with memory disabled.
 
+## Beyond the rubric
+
+- **Structured output validation** — the loyalty-discount tool validates its result
+  (sandbox path *and* fallback) against the `DiscountBreakdown` Pydantic model, so a
+  malformed or partial computation is caught before it reaches the customer.
+- **Conversation summarization** — the agent uses Strands'
+  `SummarizingConversationManager`, which summarizes older turns once history grows
+  instead of dropping them, preserving context on long conversations while bounding
+  token cost.
+- **Accurate refunds** — the system prompt directs the agent to look up the order
+  (`get_order`) for its price before initiating a refund, so the refund amount is
+  correct rather than defaulting to $0.
+
 ## Layout
 
 ```

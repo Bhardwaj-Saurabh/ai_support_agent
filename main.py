@@ -40,13 +40,15 @@ from strands.hooks import (
 )
 import logging
 import uuid
-from typing import Dict
+from typing import Dict, Optional
 from bedrock_agentcore.tools.code_interpreter_client import code_session
 from strands_tools.browser import AgentCoreBrowser
+from strands.agent.conversation_manager import SummarizingConversationManager
 
 import httpx
 from botocore.auth import SigV4Auth
 from botocore.awsrequest import AWSRequest
+from pydantic import BaseModel, Field
 
 
 logging.basicConfig(level=logging.WARNING)
@@ -96,6 +98,28 @@ class SigV4HTTPXAuth(httpx.Auth):
         SigV4Auth(self._credentials, self._service, self._region).add_auth(aws_request)
         request.headers.update(dict(aws_request.headers))
         yield request
+
+
+# ── Structured output model ───────────────────────────────────────────────────
+class DiscountBreakdown(BaseModel):
+    """Validated shape of a loyalty-discount calculation.
+
+    Validating the sandbox's output against this model catches malformed or
+    partial results before they ever reach the customer.
+    """
+
+    order_total: float
+    tier: str
+    tier_discount_pct: float = Field(ge=0, le=100)
+    points_redeemed: int = Field(ge=0)
+    tier_discount_usd: float = Field(ge=0)
+    final_total: float = Field(ge=0)
+    remaining_points: int = Field(ge=0)
+    # Optional enrichments (present on the full sandbox path, absent on fallback).
+    points_value_usd: Optional[float] = None
+    total_savings: Optional[float] = None
+    points_earned: Optional[int] = None
+    note: Optional[str] = None
 
 
 # ── TODO 4 — Namespace Helper ─────────────────────────────────────────────────
@@ -255,6 +279,19 @@ def search_knowledge_base(query: str) -> str:
     return "\n---\n".join(chunks)
 
 
+def _extract_sandbox_stdout(result: dict) -> str:
+    """Pull the printed JSON string out of a Code Interpreter result event."""
+    if not isinstance(result, dict):
+        return ""
+    structured = result.get("structuredContent")
+    if isinstance(structured, dict) and structured.get("stdout"):
+        return structured["stdout"].strip()
+    for block in result.get("content", []):
+        if isinstance(block, dict) and block.get("type") == "text" and block.get("text"):
+            return block["text"].strip()
+    return ""
+
+
 # ── TODO 7 — Loyalty Discount Tool (Code Interpreter) ────────────────────────
 @tool
 def calculate_loyalty_discount(
@@ -326,26 +363,33 @@ print(json.dumps(result))
                 "executeCode",
                 {"language": "python", "code": code, "clearContext": True},
             )
+            raw = None
             for event in execution["stream"]:
-                return json.dumps(event["result"])
-        return "Code Interpreter returned no result."
+                raw = _extract_sandbox_stdout(event.get("result", {}))
+                break
+            if not raw:
+                raise ValueError("Code Interpreter returned no output.")
+            # Validate the sandbox output against the schema before returning it.
+            breakdown = DiscountBreakdown.model_validate_json(raw)
+            return breakdown.model_dump_json()
 
     except Exception as e:
-        # Fallback: tier discount only, no sandbox.
+        # Fallback: tier discount only, no sandbox — still schema-validated.
         logger.warning("Code Interpreter unavailable, using fallback: %s", e)
         tier_rate = {"Silver": 0.00, "Gold": 0.10, "Platinum": 0.15}.get(tier, 0.0)
         tier_discount = round(order_total * tier_rate, 2)
         final_total = round(order_total - tier_discount, 2)
-        return json.dumps({
-            "order_total": round(order_total, 2),
-            "tier": tier,
-            "tier_discount_pct": round(tier_rate * 100, 2),
-            "points_redeemed": 0,
-            "tier_discount_usd": tier_discount,
-            "final_total": final_total,
-            "remaining_points": loyalty_points,
-            "note": "Approximate: computed without Code Interpreter (points not redeemed).",
-        })
+        breakdown = DiscountBreakdown(
+            order_total=round(order_total, 2),
+            tier=tier,
+            tier_discount_pct=round(tier_rate * 100, 2),
+            points_redeemed=0,
+            tier_discount_usd=tier_discount,
+            final_total=final_total,
+            remaining_points=loyalty_points,
+            note="Approximate: computed without Code Interpreter (points not redeemed).",
+        )
+        return breakdown.model_dump_json()
 
 
 # ── System prompt ─────────────────────────────────────────────────────────────
@@ -360,6 +404,9 @@ You can:
 
 Guidelines:
 - Use the customer's ID from the conversation context when calling order/customer tools.
+- Before initiating a refund, first look up the order with get_order to obtain the
+  item's price, then pass that value as the refund `amount` so the customer sees the
+  correct refund total.
 - Prefer search_knowledge_base for policy and product facts rather than guessing.
 - Always use calculate_loyalty_discount for discount math — never compute it yourself.
 - Be concise, accurate, and friendly. If a tool returns an error, explain it plainly.
@@ -395,6 +442,13 @@ async def invoke(payload, context=None):
     # Live web browsing tool.
     agent_core_browser = AgentCoreBrowser(region=REGION)
 
+    # Summarize older turns once the history grows, instead of dropping them —
+    # preserves long-conversation context while keeping token cost bounded.
+    conversation_manager = SummarizingConversationManager(
+        summary_ratio=0.3,
+        preserve_recent_messages=10,
+    )
+
     # Local tools; gateway tools are appended after the MCP connection opens.
     tools = [search_knowledge_base, calculate_loyalty_discount, agent_core_browser.browser]
 
@@ -413,6 +467,7 @@ async def invoke(payload, context=None):
                 model=model,
                 tools=tools,
                 hooks=[memory_hook],
+                conversation_manager=conversation_manager,
                 system_prompt=SYSTEM_PROMPT,
             )
 
