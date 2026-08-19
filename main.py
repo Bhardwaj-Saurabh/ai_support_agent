@@ -308,7 +308,7 @@ remaining_points = loyalty_points - points_redeemed + points_earned
 result = {{
     "order_total": round(order_total, 2),
     "tier": tier,
-    "tier_discount_rate": tier_rate,
+    "tier_discount_pct": round(tier_rate * 100, 2),
     "points_redeemed": points_redeemed,
     "points_value_usd": round(points_value, 2),
     "tier_discount_usd": tier_discount,
@@ -339,9 +339,11 @@ print(json.dumps(result))
         return json.dumps({
             "order_total": round(order_total, 2),
             "tier": tier,
-            "tier_discount_rate": tier_rate,
+            "tier_discount_pct": round(tier_rate * 100, 2),
+            "points_redeemed": 0,
             "tier_discount_usd": tier_discount,
             "final_total": final_total,
+            "remaining_points": loyalty_points,
             "note": "Approximate: computed without Code Interpreter (points not redeemed).",
         })
 
