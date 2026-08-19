@@ -442,6 +442,10 @@ def main():
 
 
 if __name__ == "__main__":
-    # app.run()
-    # Uncomment app.run() (and comment main()) for AgentCore deployment.
-    main()
+    import sys
+    # With a JSON arg → local CLI test. With no args → run the ASGI server
+    # (this is how the AgentCore Runtime container starts the agent).
+    if len(sys.argv) > 1:
+        main()
+    else:
+        app.run()
